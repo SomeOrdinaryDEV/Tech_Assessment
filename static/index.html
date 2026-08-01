@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Medtronics Voice Care Assistant</title>
+  <link rel="stylesheet" href="/static/styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header>
+    <h1>Medtronics Swasthya Voice</h1>
+    <p>बोलकर सवाल पूछें • 6 भाषाओं में सहायता</p>
+  </header>
+
+  <main>
+    <!-- Emergency Red Alert Container -->
+    <div id="alertCard" class="alert-card">
+      <h3 style="color: #ef4444; margin-bottom: 0.5rem;">🚨 आपातकालीन चेतावनी (Medical Emergency)</h3>
+      <p id="alertMsg">डॉक्टर को आपकी जानकारी भेज दी गई है। कृपया शांत रहें।</p>
+    </div>
+
+    <!-- Zero-Literacy Large Voice Button -->
+    <div class="mic-container">
+      <button id="micBtn" class="mic-button" aria-label="Speak Question">
+        <svg viewBox="0 0 24 24">
+          <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/>
+          <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Status & Speech Output Card -->
+    <div class="status-card">
+      <div id="domainBadge" class="status-badge">बोलने के लिए बटन दबाएं (Tap to Speak)</div>
+      <div id="responseText" class="response-text">आप दवाई, योजना, अस्पताल या बीमारी के बारे में पूछ सकते हैं।</div>
+      <div class="barge-in-tip">💡 सुनते समय रोकने के लिए बटन दबाएं (Single-Tap Barge-In)</div>
+    </div>
+  </main>
+
+  <footer>
+    <p>Medtronics_Project • <a href="/clinician" target="_blank">Clinician Teleconsultation Portal</a></p>
+  </footer>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+venv/
+.env
+.DS_Store
+audio.wav
+static/.DS_Store
+**/.pytest_cache/
+**/.mypy_cache/
+**/.ruff_cache/

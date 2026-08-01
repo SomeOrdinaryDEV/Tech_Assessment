@@ -1,0 +1,11 @@
+[
+  {
+    "id": "tri_001",
+    "topic": "High Fever and Cough Care",
+    "content": "For high fever and mild cough: Stay hydrated, rest, use warm saline gargles, and monitor body temperature. If fever exceeds 102F or persists for more than 3 days, visit your nearest PHC.",
+    "translations": {
+      "hi-IN": "बुखार और खांसी के लिए: पर्याप्त पानी पीएं, आराम करें और गरम पानी से गरारे करें। यदि बुखार 3 दिन से अधिक रहे तो तुरंत डॉक्टर को दिखाएं।",
+      "ta-IN": "காய்ச்சல் மற்றும் இருமலுக்கு: போதுமான தண்ணீர் குடிக்கவும், ஓய்வெடுக்கவும். காய்ச்சல் 3 நாட்களுக்கு மேல் நீடித்தால் PHC-க்கு செல்லவும்."
+    }
+  }
+]

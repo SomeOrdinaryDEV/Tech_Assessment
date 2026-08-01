@@ -1,0 +1,180 @@
+:root {
+  --bg-primary: #0b132b;
+  --bg-card: rgba(28, 37, 65, 0.7);
+  --accent-emerald: #10b981;
+  --accent-emerald-glow: rgba(16, 185, 129, 0.4);
+  --accent-blue: #3b82f6;
+  --accent-red: #ef4444;
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --font-main: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-main);
+}
+
+body {
+  background: radial-gradient(circle at top center, #1c2541 0%, #0b132b 100%);
+  color: var(--text-main);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem;
+}
+
+header {
+  text-align: center;
+  margin-top: 1rem;
+}
+
+header h1 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #60a5fa, #34d399);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+header p {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  margin-top: 0.3rem;
+}
+
+main {
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  margin: 2rem 0;
+}
+
+/* Zero-Literacy Large Pulsing Voice Button */
+.mic-container {
+  position: relative;
+  width: 180px;
+  height: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mic-button {
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #10b981, #059669);
+  border: none;
+  color: white;
+  cursor: pointer;
+  outline: none;
+  box-shadow: 0 0 35px var(--accent-emerald-glow);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+.mic-button svg {
+  width: 52px;
+  height: 52px;
+  fill: currentColor;
+}
+
+.mic-button:hover {
+  transform: scale(1.05);
+}
+
+.mic-button.recording {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  box-shadow: 0 0 45px rgba(239, 68, 68, 0.6);
+  animation: pulse-ring 1.5s infinite;
+}
+
+.mic-button.playing {
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  box-shadow: 0 0 45px rgba(59, 130, 246, 0.6);
+}
+
+@keyframes pulse-ring {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+  100% { transform: scale(1); }
+}
+
+/* Status & Visualizer Card */
+.status-card {
+  width: 100%;
+  background: var(--bg-card);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 1.25rem;
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 0.4rem 1rem;
+  border-radius: 2rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.08);
+  color: #a7f3d0;
+  margin-bottom: 1rem;
+}
+
+.response-text {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  min-height: 3rem;
+  color: var(--text-main);
+}
+
+.barge-in-tip {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-top: 1rem;
+}
+
+/* Emergency Red Alert Card */
+.alert-card {
+  width: 100%;
+  background: rgba(239, 68, 68, 0.15);
+  border: 2px solid var(--accent-red);
+  border-radius: 1.25rem;
+  padding: 1.5rem;
+  text-align: center;
+  display: none;
+}
+
+.alert-card.active {
+  display: block;
+  animation: shake 0.5s;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-8px); }
+  40%, 80% { transform: translateX(8px); }
+}
+
+footer {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+footer a {
+  color: #60a5fa;
+  text-decoration: none;
+}

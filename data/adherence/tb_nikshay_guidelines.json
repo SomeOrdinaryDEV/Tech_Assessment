@@ -1,0 +1,21 @@
+[
+  {
+    "id": "adh_001",
+    "topic": "TB Medication Dosage Missed",
+    "content": "Official Nikshay Adherence Protocol: If you miss a single daily TB tablet, take it as soon as you remember on the same day. Do NOT take double doses on the next day. Contact your ASHA worker or local PHC if you miss more than 2 consecutive doses.",
+    "translations": {
+      "hi-IN": "अगर आप अपनी टीबी की दवाई भूल गए हैं, तो याद आते ही उसी दिन खुराक लें। अगले दिन दोहरी खुराक न लें। अगर 2 दिन से अधिक दवा छूटे, तो आशा कार्यकर्ता या नजदीकी पीएचसी से संपर्क करें।",
+      "ta-IN": "நீங்கள் டிபி மாத்திரையை தவறவிட்டால், நினைவில் வந்தவுடன் அதே நாளில் எடுத்துக்கொள்ளுங்கள். மறுநாள் இரட்டை டோஸ் எடுக்க வேண்டாம்.",
+      "te-IN": "మీరు TB మాత్రను మరచిపోతే, గుర్తుకు రాగానే అదే రోజు తీసుకోండి. మరుసటి రోజు రెట్టింపు మోతాదు తీసుకోకండి."
+    }
+  },
+  {
+    "id": "adh_002",
+    "topic": "Diabetes Medication Schedule",
+    "content": "Metformin and Insulin Adherence: Take Metformin with or immediately after meals to reduce stomach upset. Never skip meals when taking diabetes medication.",
+    "translations": {
+      "hi-IN": "डायबिटीज की दवा हमेशा खाने के साथ या खाने के तुरंत बाद लें। दवा लेने के बाद खाना न छोड़ें।",
+      "ta-IN": "சர்க்கரை நோய் மாத்திரைகளை எப்போதும் உணவோடு அல்லது உணவுக்கு பின் எடுத்துக்கொள்ளுங்கள்."
+    }
+  }
+]

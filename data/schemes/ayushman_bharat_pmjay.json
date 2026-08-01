@@ -1,0 +1,21 @@
+[
+  {
+    "id": "sch_001",
+    "topic": "Ayushman Bharat PM-JAY Benefits",
+    "content": "Ayushman Bharat PM-JAY provides health coverage up to Rs 5 Lakh per family per year for secondary and tertiary hospitalization care across empaneled public and private hospitals. Treatment is completely cashless.",
+    "translations": {
+      "hi-IN": "आयुष्मान भारत योजना के तहत प्रति परिवार हर साल 5 लाख रुपये तक का मुफ्त कैशलेस इलाज सूचीबद्ध सरकारी और निजी अस्पतालों में मिलता है।",
+      "ta-IN": "ஆயுஷ்மான் பாரத் திட்டத்தின் கீழ் குடும்பத்திற்கு ஆண்டிற்கு 5 லட்சம் ரூபாய் வரை இலவச சிகிச்சை கிடைக்கிறது.",
+      "te-IN": "ఆయుష్మాన్ భారత్ పథకం కింద ప్రతి కుటుంబానికి ఏటా రూ.5 లక్షల వరకు ఉచిత వైద్య చికిత్స లభిస్తుంది."
+    }
+  },
+  {
+    "id": "sch_002",
+    "topic": "Janani Suraksha Yojana (JSY)",
+    "content": "Janani Suraksha Yojana provides financial assistance of Rs 1400 to pregnant women in rural areas delivering in institutional public health centers.",
+    "translations": {
+      "hi-IN": "जननी सुरक्षा योजना के तहत सरकारी अस्पताल में प्रसव कराने पर ग्रामीण महिलाओं को 1400 रुपये की वित्तीय सहायता मिलती है।",
+      "ta-IN": "ஜனனி சுரக்ஷா யோஜனா மூலம் அரசு மருத்துவமனையில் பிரசவம் செய்யும் பெண்களுக்கு நிதியுதவி வழங்கப்படுகிறது."
+    }
+  }
+]
