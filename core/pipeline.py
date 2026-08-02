@@ -3,19 +3,19 @@ import logging
 import uuid
 from config import settings
 from core.models import DomainType, PipelineResponse, EscalationPayload
-from engines.stt.google_stt import GoogleSTTEngine
+
 from engines.intent.classifier import DeterministicIntentClassifier
 from engines.rag.partition_manager import PartitionedRAGManager
 from engines.rag.query_data import IntentRAGManager
 from engines.rag.synthesizer import GroundedSynthesizer
 from engines.safety.gate import DeterministicSafetyGate
 from engines.safety.telemetry import telemetry_tracker
-from engines.tts.google_tts import GoogleTTSEngine
 from engines.translator.sarvam_translator import SarvamTranslatorEngine
+from engines.tts.sarvam_tts import SarvamTTSEngine
 from portal.teleconsult import teleconsult_portal
 
 logger = logging.getLogger("core_pipeline")
-
+SARVAM_API_KEY = "sk_mempi2aj_p1SWKIL9XGaFOJ91nLgqM41X"
 class MedtronicsCorePipeline:
     """Main Orchestration Pipeline uniting STT, Translator, Intent Router, RAG, Safety Gate, TTS, and Teleconsultation."""
 
@@ -35,7 +35,7 @@ class MedtronicsCorePipeline:
         self.intent_classifier = DeterministicIntentClassifier()
         self.rag_manager = IntentRAGManager(chroma_path="chroma")
         self.safety_gate = DeterministicSafetyGate()
-        self.tts_engine = GoogleTTSEngine()
+        self.tts_engine = SarvamTTSEngine(api_key=SARVAM_API_KEY)
 
     async def process_voice_input(self, audio_bytes: bytes, session_id: str = None) -> PipelineResponse:
         start_time = time.time()
@@ -96,8 +96,10 @@ class MedtronicsCorePipeline:
             return await self._handle_emergency_escalation(session_id, stt_result, output_safety_eval, start_time)
 
         # Step 9: Low-Latency TTS Synthesis
-        audio_b64 = await self.tts_engine.synthesize_speech(final_response, stt_result.language)
-
+        audio_b64 = await self.tts_engine.synthesize_speech(
+            text=final_response,
+            language=stt_result.language      # target language = user’s input language
+        )
         latency_ms = (time.time() - start_time) * 1000
         telemetry_tracker.log_event(session_id, stt_result.transcript, False, "", latency_ms)
 

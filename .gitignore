@@ -11,3 +11,4 @@ static/.DS_Store
 **/.pytest_cache/
 **/.mypy_cache/
 **/.ruff_cache/
+government_docs/

@@ -1,45 +1,34 @@
-# test1.py
-from engines.rag.query_data import IntentRAGManager
-from core.models import DomainType
+from sarvamai import SarvamAI
 
-def main():
-    rag = IntentRAGManager()
+text="Hello, my name is Shrinivas, and I am a software engineer. I enjoy working on AI and machine learning projects."
+client = SarvamAI(
+    api_subscription_key="sk_mempi2aj_p1SWKIL9XGaFOJ91nLgqM41X",
+)
 
-    # Predefined test cases – change or add your own
-    tests = [
-        (DomainType.ADHERENCE, "When should I take my TB medicine?", "en-IN"),
-        (DomainType.SCHEMES, "Am I eligible for Ayushman Bharat?", "hi-IN"),
-        (DomainType.FACILITY_LINKAGE, "Where is the nearest government hospital?", "en-IN"),
-        (DomainType.TRIAGE, "I have chest pain, what should I do?", "en-IN"),
-    ]
+response = client.text.translate(
+    source_language_code="en-IN",
+    input=text,
+    target_language_code="hi-IN",
+    model="mayura:v1",
+    numerals_format="international",
+    mode="formal",
+)
 
-    print("=== Running predefined tests ===")
-    for domain, query, lang in tests:
-        print(f"\n>> Domain: {domain.value} | Query: {query}")
-        response = rag.query(domain=domain, query_text=query, language=lang, n_results=10)
-        print(f">> Response: {response}")
+print(response.translated_text)
 
-    print("\n=== Interactive mode (type 'quit' to exit) ===")
-    while True:
-        q = input("\nQuery: ").strip()
-        if q.lower() == "quit":
-            break
-        d = input("Domain (adherence/schemes/facility_linkage/triage): ").strip().lower()
-        lang = input("Language (hi-IN/en-IN, default hi-IN): ").strip() or "hi-IN"
+audio_stream = client.text_to_speech.convert_stream(
+    text=response.translated_text,
+    target_language_code="hi-IN",
+    speaker="shubh",
+    model="bulbul:v3",
+    pace=0.77,
+    speech_sample_rate=22050,
+)
 
-        domain_map = {
-            "adherence": DomainType.ADHERENCE,
-            "schemes": DomainType.SCHEMES,
-            "facility_linkage": DomainType.FACILITY_LINKAGE,
-            "triage": DomainType.TRIAGE,
-        }
-        domain = domain_map.get(d)
-        if not domain:
-            print("Invalid domain, using TRIAGE as default.")
-            domain = DomainType.TRIAGE
+with open("speech.mp3", "wb") as f:
+    for chunk in audio_stream:
+        if chunk:  # skip empty chunks if any
+            f.write(chunk)
+            f.flush()
 
-        response = rag.query(domain=domain, query_text=q, language=lang, n_results=10)
-        print(f"Response: {response}")
-
-if __name__ == "__main__":
-    main()
+print("Audio saved to speech.mp3")
