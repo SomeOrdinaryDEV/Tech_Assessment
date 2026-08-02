@@ -65,15 +65,11 @@ class MedtronicsCorePipeline:
         if safety_eval.is_emergency:
             return await self._handle_emergency_escalation(session_id, stt_result, safety_eval, start_time)
 
-        # Step 4: Translate Native Indic Script to English Search Query (e.g. 'भारत' -> 'Bharat')
-        search_query = await self.translator.translate_to_english(stt_result.transcript, stt_result.language)
-        logger.info(f"[{session_id}] Translated Search Query for RAG: '{search_query}'")
-
-        # Step 5: Deterministic Intent Router (Evaluates raw + translated text)
-        intent_result = self.intent_classifier.classify_intent(f"{stt_result.transcript} {search_query}")
+        # Step 4: Deterministic Intent Router (Evaluates raw + translated text)
+        intent_result = self.intent_classifier.classify_intent(f"{stt_result.transcript} {stt_result.translation}")
         logger.info(f"[{session_id}] Classified Domain: {intent_result.domain.value}")
 
-        # Step 6: Handle Out-of-Scope / Rejection Node
+        # Step 5: Handle Out-of-Scope / Rejection Node
         if intent_result.domain == DomainType.OUT_OF_SCOPE:
             rejection_text = "Main srif dawaiyan, sarkari yojana, aspatal, aur swasthya jaanch me madad kar sakta hoon."
             audio_b64 = await self.tts_engine.synthesize_speech(rejection_text, stt_result.language)
@@ -88,18 +84,18 @@ class MedtronicsCorePipeline:
                 is_rejection=True
             )
 
-        # Step 7: Isolated RAG Retrieval using Translated Query
-        rag_context = self.rag_manager.query_isolated_domain(intent_result.domain, search_query)
+        # Step 6: Isolated RAG Retrieval using Translated Query
+        rag_context = self.rag_manager.query_isolated_domain(intent_result.domain,  stt_result.translation)
 
-        # Step 8: Grounded Response Synthesizer
+        # Step 7: Grounded Response Synthesizer
         text_response = self.synthesizer.synthesize_response(rag_context, stt_result.language)
 
-        # Step 9: Safety Gate Output Pass (Evaluate generated response)
+        # Step 8: Safety Gate Output Pass (Evaluate generated response)
         output_safety_eval = self.safety_gate.evaluate_safety(stt_result.transcript, text_response)
         if output_safety_eval.is_emergency:
             return await self._handle_emergency_escalation(session_id, stt_result, output_safety_eval, start_time)
 
-        # Step 10: Low-Latency TTS Synthesis
+        # Step 9: Low-Latency TTS Synthesis
         audio_b64 = await self.tts_engine.synthesize_speech(text_response, stt_result.language)
 
         latency_ms = (time.time() - start_time) * 1000

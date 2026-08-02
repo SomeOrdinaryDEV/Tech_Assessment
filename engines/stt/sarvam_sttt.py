@@ -3,6 +3,7 @@ import os
 import logging
 import requests
 from config import settings
+from sarvamai import SarvamAI
 from core.models import STTResult
 from engines.stt.base import BaseSTTEngine
 
@@ -13,7 +14,7 @@ class SarvamSTTEngine(BaseSTTEngine):
 
     def __init__(self, api_key: str = None):
         # NOTE: It is highly recommended to fetch this from env vars, e.g., os.getenv("SARVAM_API_KEY")
-        self.api_key = "" 
+        self.api_key = "sk_6azugix3_iP2Ao5iLVqoneOcvhr0bHvey" 
         self.client = None
 
         if self.api_key:
