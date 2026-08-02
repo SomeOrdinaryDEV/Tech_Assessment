@@ -7,7 +7,7 @@ DOMAIN_KEYWORDS = {
     "adherence": [
         # Hindi / Hinglish / Devanagari
         "dawa", "dawai", "tablet", "miss", "choot", "timing", "khana", "khaya", "dose", "nikshay", "tb", "pill",
-        "दवा", "दवाई", "टैबलेट", "छूट", "खुराक", "निक्षय", "टीबी",
+        "दवा", "दवाई", "टैबलेट", "छूट", "खुराक", "निक्षय", "टीबी", "medicine"
         # Tamil
         "marundhu", "saapida", "மருந்து", "மாத்திரை",
         # Telugu

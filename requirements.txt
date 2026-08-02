@@ -10,4 +10,12 @@ requests>=2.31.0
 sarvamai>=0.1.0
 python-dotenv>=1.0.0
 torch>=2.6.0
-
+pypdf
+langchain
+langchain-community
+langchain-ollama
+langchain-core
+langchain-chroma
+langchain-text-splitters
+pytest
+boto3

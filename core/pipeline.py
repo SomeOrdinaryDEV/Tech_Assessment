@@ -6,6 +6,7 @@ from core.models import DomainType, PipelineResponse, EscalationPayload
 from engines.stt.google_stt import GoogleSTTEngine
 from engines.intent.classifier import DeterministicIntentClassifier
 from engines.rag.partition_manager import PartitionedRAGManager
+from engines.rag.query_data import IntentRAGManager
 from engines.rag.synthesizer import GroundedSynthesizer
 from engines.safety.gate import DeterministicSafetyGate
 from engines.safety.telemetry import telemetry_tracker
@@ -32,8 +33,7 @@ class MedtronicsCorePipeline:
 
         self.translator = SarvamTranslatorEngine()
         self.intent_classifier = DeterministicIntentClassifier()
-        self.rag_manager = PartitionedRAGManager()
-        self.synthesizer = GroundedSynthesizer()
+        self.rag_manager = IntentRAGManager(chroma_path="chroma")
         self.safety_gate = DeterministicSafetyGate()
         self.tts_engine = GoogleTTSEngine()
 
@@ -83,20 +83,20 @@ class MedtronicsCorePipeline:
                 audio_b64=audio_b64,
                 is_rejection=True
             )
-
         # Step 6: Isolated RAG Retrieval using Translated Query
-        rag_context = self.rag_manager.query_isolated_domain(intent_result.domain,  stt_result.translation)
-
-        # Step 7: Grounded Response Synthesizer
-        text_response = self.synthesizer.synthesize_response(rag_context, stt_result.language)
-
+        final_response = self.rag_manager.query(
+            domain=intent_result.domain,
+            query_text=stt_result.translation,
+            language=stt_result.language
+        )
+        print(f"[{session_id}] RAG Generated Response: {final_response}")
         # Step 8: Safety Gate Output Pass (Evaluate generated response)
-        output_safety_eval = self.safety_gate.evaluate_safety(stt_result.transcript, text_response)
+        output_safety_eval = self.safety_gate.evaluate_safety(stt_result.transcript, final_response)
         if output_safety_eval.is_emergency:
             return await self._handle_emergency_escalation(session_id, stt_result, output_safety_eval, start_time)
 
         # Step 9: Low-Latency TTS Synthesis
-        audio_b64 = await self.tts_engine.synthesize_speech(text_response, stt_result.language)
+        audio_b64 = await self.tts_engine.synthesize_speech(final_response, stt_result.language)
 
         latency_ms = (time.time() - start_time) * 1000
         telemetry_tracker.log_event(session_id, stt_result.transcript, False, "", latency_ms)
@@ -107,7 +107,7 @@ class MedtronicsCorePipeline:
             translation=stt_result.translation,
             language=stt_result.language,
             domain=intent_result.domain,
-            text_response=text_response,
+            text_response=final_response,
             audio_b64=audio_b64,
             is_emergency=False,
             is_rejection=False

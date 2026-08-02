@@ -23,12 +23,6 @@ class IntentResult(BaseModel):
     matched_keyword: Optional[str] = None
     is_fallback: bool = False
 
-class RAGContext(BaseModel):
-    domain: DomainType
-    retrieved_chunks: List[str] = []
-    source_documents: List[str] = []
-    has_context: bool = True
-
 class SafetyResult(BaseModel):
     is_emergency: bool = False
     red_flag_rule: Optional[str] = None
@@ -57,3 +51,10 @@ class EscalationPayload(BaseModel):
     matched_keyword: str
     timestamp: str
     status: str = "PENDING_DOCTOR_JOIN"
+
+class RAGContext(BaseModel):
+    """RAG context with domain tracking for intent-aware processing."""
+    domain: DomainType  # Keep domain for tracking
+    retrieved_chunks: List[str] = Field(default_factory=list)
+    source_documents: List[str] = Field(default_factory=list)
+    has_context: bool = False
