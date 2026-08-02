@@ -17,8 +17,8 @@ class Settings(BaseModel):
     DEFAULT_LANGUAGE: str = "hi-IN"
     
     # Confidence & Safety Thresholds
-    STT_MIN_CONFIDENCE: float = 0.65
-    INTENT_MIN_SIMILARITY: float = 0.72
+    STT_MIN_CONFIDENCE: float = 0.85
+    INTENT_MIN_SIMILARITY: float = 0.85
     
     # Approved 4 Core Domains
     APPROVED_DOMAINS: list[str] = ["adherence", "schemes", "facility_linkage", "triage"]

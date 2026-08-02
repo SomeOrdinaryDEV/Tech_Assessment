@@ -21,7 +21,7 @@ class MedtronicsCorePipeline:
     def __init__(self):
         # Select STT Engine based on config
         if settings.STT_ENGINE_TYPE == "sarvam":
-            from engines.stt.sarvam_stt import SarvamSTTEngine
+            from engines.stt.sarvam_sttt import SarvamSTTEngine
             self.stt_engine = SarvamSTTEngine()
         elif settings.STT_ENGINE_TYPE == "google":
             from engines.stt.google_stt import GoogleSTTEngine
@@ -43,7 +43,7 @@ class MedtronicsCorePipeline:
 
         # Step 1: STT & Language Detection
         stt_result = await self.stt_engine.transcribe_audio_bytes(audio_bytes)
-        logger.info(f"[{session_id}] STT Result: '{stt_result.transcript}' (Lang: {stt_result.language}, Conf: {stt_result.confidence})")
+        logger.info(f"[{session_id}] STT Result: \nTranscript: '{stt_result.transcript}'\nTranslation: '{stt_result.translation}'\n  (Lang: {stt_result.language}, Conf: {stt_result.confidence})")
 
         # Step 2: Confidence Filter Gate (< 0.65 Re-Ask)
         if not stt_result.transcript or stt_result.confidence < settings.STT_MIN_CONFIDENCE:
@@ -52,6 +52,7 @@ class MedtronicsCorePipeline:
             return PipelineResponse(
                 session_id=session_id,
                 transcript=stt_result.transcript,
+                translation=stt_result.translation,
                 language=stt_result.language,
                 domain=DomainType.LOW_CONFIDENCE,
                 text_response=reask_text,
@@ -79,6 +80,7 @@ class MedtronicsCorePipeline:
             return PipelineResponse(
                 session_id=session_id,
                 transcript=stt_result.transcript,
+                translation=stt_result.translation,
                 language=stt_result.language,
                 domain=DomainType.OUT_OF_SCOPE,
                 text_response=rejection_text,
@@ -106,6 +108,7 @@ class MedtronicsCorePipeline:
         return PipelineResponse(
             session_id=session_id,
             transcript=stt_result.transcript,
+            translation=stt_result.translation,
             language=stt_result.language,
             domain=intent_result.domain,
             text_response=text_response,
@@ -137,6 +140,7 @@ class MedtronicsCorePipeline:
         return PipelineResponse(
             session_id=session_id,
             transcript=stt_result.transcript,
+            translation=stt_result.translation,
             language=stt_result.language,
             domain=DomainType.TRIAGE,
             text_response=emergency_text,

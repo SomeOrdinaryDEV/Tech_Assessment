@@ -12,6 +12,7 @@ class DomainType(str, Enum):
 
 class STTResult(BaseModel):
     transcript: str
+    translation: str
     language: str = "hi-IN"
     confidence: float = 1.0
     is_final: bool = True
@@ -38,6 +39,7 @@ class SafetyResult(BaseModel):
 class PipelineResponse(BaseModel):
     session_id: str
     transcript: str
+    translation: str
     language: str
     domain: DomainType
     text_response: str
