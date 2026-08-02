@@ -1,37 +1,45 @@
-# test_search.py
-from langchain_chroma import Chroma
-from langchain_core.prompts import ChatPromptTemplate
-from langchain_ollama.embeddings import OllamaEmbeddings
-from langchain_community.llms.ollama import Ollama
+# test1.py
+from engines.rag.query_data import IntentRAGManager
+from core.models import DomainType
 
-CHROMA_PATH = "chroma"
-PROMPT_TEMPLATE = """
-Answer the question based only on the following context:
+def main():
+    rag = IntentRAGManager()
 
-{context}
+    # Predefined test cases – change or add your own
+    tests = [
+        (DomainType.ADHERENCE, "When should I take my TB medicine?", "en-IN"),
+        (DomainType.SCHEMES, "Am I eligible for Ayushman Bharat?", "hi-IN"),
+        (DomainType.FACILITY_LINKAGE, "Where is the nearest government hospital?", "en-IN"),
+        (DomainType.TRIAGE, "I have chest pain, what should I do?", "en-IN"),
+    ]
 
----
+    print("=== Running predefined tests ===")
+    for domain, query, lang in tests:
+        print(f"\n>> Domain: {domain.value} | Query: {query}")
+        response = rag.query(domain=domain, query_text=query, language=lang, n_results=10)
+        print(f">> Response: {response}")
 
-Answer the question based on the above context: {question}
-"""
-def query_rag(query_text: str):
-    embedding_function = OllamaEmbeddings(model="nomic-embed-text")
-    db = Chroma(persist_directory=CHROMA_PATH, embedding_function=embedding_function)
+    print("\n=== Interactive mode (type 'quit' to exit) ===")
+    while True:
+        q = input("\nQuery: ").strip()
+        if q.lower() == "quit":
+            break
+        d = input("Domain (adherence/schemes/facility_linkage/triage): ").strip().lower()
+        lang = input("Language (hi-IN/en-IN, default hi-IN): ").strip() or "hi-IN"
 
-    results = db.similarity_search_with_score(query_text, k=7)
+        domain_map = {
+            "adherence": DomainType.ADHERENCE,
+            "schemes": DomainType.SCHEMES,
+            "facility_linkage": DomainType.FACILITY_LINKAGE,
+            "triage": DomainType.TRIAGE,
+        }
+        domain = domain_map.get(d)
+        if not domain:
+            print("Invalid domain, using TRIAGE as default.")
+            domain = DomainType.TRIAGE
 
-    context_text = "\n\n---\n\n".join([doc.page_content for doc, _score in results])
-    prompt_template = ChatPromptTemplate.from_template(PROMPT_TEMPLATE)
-    prompt = prompt_template.format(context=context_text, question=query_text)
-
-    model = Ollama(model="qwen3:8b")  # Change to your model
-    response_text = model.invoke(prompt)
-
-    sources = [doc.metadata.get("id", doc.metadata.get("source", "unknown")) for doc, _score in results]
-    formatted_response = f"Response: {response_text}\n\nSources: {sources}"
-    print(formatted_response)
-    return response_text
+        response = rag.query(domain=domain, query_text=q, language=lang, n_results=10)
+        print(f"Response: {response}")
 
 if __name__ == "__main__":
-    query = input("Enter your query: ")
-    query_rag(query)
+    main()

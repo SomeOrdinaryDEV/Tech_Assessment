@@ -1,22 +1,21 @@
-# query_data.py
 import logging
 from langchain_chroma import Chroma
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_community.llms.ollama import Ollama
-from langchain_ollama import OllamaEmbeddings
-from get_embedding_function import get_embedding_function
+from langchain_community.embeddings import OllamaEmbeddings
 from core.models import DomainType
 
 logger = logging.getLogger("intent_rag_manager")
 
 CHROMA_PATH = "chroma"
 
+# Updated safety preamble – softer fallback, still anchored to context
 SAFETY_PREAMBLE = """
 You are VDA, a public-health information assistant.
 
 NON-NEGOTIABLE RULES:
 1. Use ONLY the retrieved context provided below. Do not use prior knowledge or model memory.
-2. If the answer is not explicitly supported by the retrieved context, reply exactly: "I could not find this information in the available health-service guidance."
+2. If the answer is not clearly supported by the retrieved context, say: "Based on the available guidance, I can only tell you that [insert relevant details from context]. For a complete answer, please consult a healthcare worker."
 3. Do NOT diagnose diseases.
 4. Do NOT prescribe medicines, change doses, or interpret lab results.
 5. Do NOT generate free-form clinical advice.
@@ -119,14 +118,27 @@ def build_search_query(domain: DomainType, query_text: str) -> str:
 
 class IntentRAGManager:
     def __init__(self, chroma_path: str = CHROMA_PATH):
+        # Explicit embedding function
         self.embedding_function = OllamaEmbeddings(model="nomic-embed-text")
-        self.db = Chroma(persist_directory=chroma_path, embedding_function=self.embedding_function)
-        self.llm = Ollama(model="qwen3:8b", temperature=0.0, top_p=0.1, repeat_penalty=1.1)
+        self.db = Chroma(
+            persist_directory=chroma_path,
+            embedding_function=self.embedding_function
+        )
+        self.llm = Ollama(
+            model="qwen3:8b",
+            temperature=0.0,
+            top_p=0.1,
+            repeat_penalty=1.1
+        )
 
-    def query(self, domain: DomainType, query_text: str, language: str = "hi-IN") -> str:
+    def query(self, domain: DomainType, query_text: str, language: str = "hi-IN", n_results: int = 10) -> str:
+        """
+        Retrieves chunks and generates an intent‑specific answer.
+        n_results can be tuned (default 10) for better coverage.
+        """
         try:
             search_query = build_search_query(domain, query_text)
-            results = self.db.similarity_search_with_score(search_query, k=7)
+            results = self.db.similarity_search_with_score(search_query, k=n_results)
             chunks = [doc.page_content for doc, _ in results]
 
             if not chunks:
