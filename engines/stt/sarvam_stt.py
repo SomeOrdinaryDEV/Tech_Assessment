@@ -12,7 +12,7 @@ class SarvamSTTEngine(BaseSTTEngine):
     """Sarvam AI Speech-to-Text Driver (supporting model saaras:v3) with auto language detection."""
 
     def __init__(self, api_key: str = None):
-        self.api_key = "sk_6azugix3_iP2Ao5iLVqoneOcvhr0bHvey"
+        self.api_key = ""
         self.client = None
 
         if self.api_key:
