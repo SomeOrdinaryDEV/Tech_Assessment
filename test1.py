@@ -2,7 +2,7 @@ from sarvamai import SarvamAI
 
 text="Hello, my name is Shrinivas, and I am a software engineer. I enjoy working on AI and machine learning projects."
 client = SarvamAI(
-    api_subscription_key="sk_mempi2aj_p1SWKIL9XGaFOJ91nLgqM41X",
+    api_subscription_key="",
 )
 
 response = client.text.translate(
