@@ -1,7 +1,7 @@
 import asyncio
 from engines.tts.sarvam_tts import SarvamTTSEngine
 
-API_KEY = "sk_mempi2aj_p1SWKIL9XGaFOJ91nLgqM41X"
+API_KEY = ""
 
 async def main():
     engine = SarvamTTSEngine(api_key=API_KEY)
